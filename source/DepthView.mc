@@ -7,11 +7,12 @@ import Toybox.System;
 
 class DepthView extends WatchUi.SimpleDataField {
 
-    const DEFAULT_PRESSURE_SURFACE = 100930;
     const SALT_WATER_DENSITY = 1023.6;
     const FRESH_WATER_DENSITY = 997047.4;
     const GRAVITY_ACCELERATION = 9.80665;
     const DENSITY_GRAVITY = SALT_WATER_DENSITY * GRAVITY_ACCELERATION;
+
+    var localPressureSurface as Numeric or Null = null;
 
     function initialize() {
         SimpleDataField.initialize();
@@ -21,7 +22,15 @@ class DepthView extends WatchUi.SimpleDataField {
     function compute(info as Activity.Info) as Numeric or Duration or String or Null {
         var pressure = info.ambientPressure;
 
-        var pressureDiff = pressure - DEFAULT_PRESSURE_SURFACE;
+        if (pressure == null) {
+            return "N/A";
+        }
+
+        if (localPressureSurface == null) {
+            localPressureSurface = pressure;
+        }
+
+        var pressureDiff = pressure - localPressureSurface;
 
         if (pressureDiff <= 0) {
             return 0;
