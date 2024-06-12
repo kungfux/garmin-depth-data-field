@@ -1,0 +1,12 @@
+<resources>
+    <fitContributions>
+        <fitField id="0"
+        displayInChart="true"
+        sortOrder="0"
+        precision="2"
+        chartTitle="@Strings.depth_label"
+        dataLabel="@Strings.depth_label"
+        unitLabel="@Strings.depth_units"
+        fillColor="#017B92" />
+    </fitContributions>
+</resources>

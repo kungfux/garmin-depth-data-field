@@ -1,3 +1,5 @@
 <strings>
     <string id="AppName">Depth</string>
+    <string id="depth_label">Depth</string>
+    <string id="depth_units">m</string>
 </strings>

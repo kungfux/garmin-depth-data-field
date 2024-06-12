@@ -1,9 +1,11 @@
-import Toybox.Activity;
-import Toybox.Lang;
-import Toybox.Time;
-import Toybox.WatchUi;
-import Toybox.SensorHistory;
 import Toybox.System;
+import Toybox.Time;
+import Toybox.Lang;
+
+using Toybox.Activity;
+using Toybox.WatchUi;
+using Toybox.SensorHistory;
+using Toybox.FitContributor;
 
 class DepthView extends WatchUi.SimpleDataField {
 
@@ -12,11 +14,23 @@ class DepthView extends WatchUi.SimpleDataField {
     const GRAVITY_ACCELERATION = 9.80665;
     const DENSITY_GRAVITY = SALT_WATER_DENSITY * GRAVITY_ACCELERATION;
 
+    var depthFitField = null;
     var localPressureSurface as Numeric or Null = null;
 
     function initialize() {
         SimpleDataField.initialize();
         label = "DEPTH";
+
+        depthFitField = createField(
+            "depth",
+            0,
+            FitContributor.DATA_TYPE_FLOAT,
+            {
+                :mesgType=>FitContributor.MESG_TYPE_RECORD,
+                :units=>"m"
+            }
+        );
+        depthFitField.setData(0.0);
     }
 
     function compute(info as Activity.Info) as Numeric or Duration or String or Null {
@@ -36,6 +50,8 @@ class DepthView extends WatchUi.SimpleDataField {
             return 0;
         }
 
-        return pressureDiff / DENSITY_GRAVITY;
+        var depth = (pressureDiff / DENSITY_GRAVITY).toFloat();
+        depthFitField.setData(depth);
+        return depth;
     }
 }
